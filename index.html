@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+<body>
+    <div>promise</div>
+    <script>
+        //promise基本语法
+        var a = new Promise(function(resolve,reject){  //执行器回调代码是同步任务
+            setTimeout(function(){
+                if(Date.now()%2==1){
+                    reject("错误信息："+Date.now())
+                }else{
+                    resolve("正确信息："+Date.now())
+                }
+            },1000)
+        })
+        a.then(function(value){
+            console.log("value1:",value);
+            return "asdfds";
+        }).then(function(value){
+            console.log("value2:",value)
+        }).catch(function(reason){
+            console.log(reason);
+        });
+        //promise语法糖
+        var b = new Promise(function(resolve){setTimeout(function(){resolve(1)},500)});
+        var c = Promise.resolve(setTimeout(function(){2},600));
+        var d = Promise.resolve(setTimeout(function(){3},400));
+        //all用法,接收promise数组，返回结果对象，数组中只要有一个是reject，都会走catch函数
+        Promise.all([b,c,d]).then(function(values){console.log("all",values)});
+        //race用法,接收promise数组，返回较快算出的那一个promise
+        Promise.race([b,c,d]).then(function(value){console.log("race",value)});
+
+        //async定义的函数，返回一个promise对象，可通过then接收
+        async function g(){
+            return 1;
+        }
+        console.log(g())
+        //await必须和async连用,直接接口promise对象resolve结果
+        var e = new Promise(function(resolve){
+            resolve(666)
+        })
+        async function h(){
+            var a = await e;
+            console.log(a);
+        };
+        h()
+    </script>
+</body>
+</html>

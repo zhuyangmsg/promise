@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+    <script src="promise.js"></script>
+</head>
+<body>
+    <div>promise</div>
+    <script>
+        //promise基本语法
+        var a = new Promise(function(resolve,reject){  //执行器回调代码是同步任务
+            //resolve(123);
+            setTimeout(function(){
+                resolve(123);
+            },0);
+        })
+        a.then(function(value){
+            console.log("value1:",value);
+            return new Promise(function(resolve){
+                resolve(456);
+            });
+        }).then(function(value){
+            console.log("value2:",value);
+        })
+        // promise语法糖
+        var c = Promise.resolve(3);
+        var d = Promise.resolve(4);
+        var f = Promise.resolve(Promise.reject(5));
+        c.then(function(value){console.log(value)});
+        d.then(function(value){console.log(value)});
+        f.catch(function(value){console.log(value)});
+        // Promise.race([c,d]).then(function(value){
+        //     console.log("race",value)
+        // })
+    </script>
+</body>
+</html>
